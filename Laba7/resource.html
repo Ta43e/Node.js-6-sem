@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resource Page</title>
+</head>
+<body>
+    <h1 id="dataUserName"></h1>
+    <h1 id="dataUserId"></h1>
+    <p>RESOURCE</p>
+    <a href="/logout">logout</a>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('/getUserData')
+                .then(response => response.json())
+                .then(userData => {
+                    document.getElementById("dataUserName").innerText = userData.username;
+                    document.getElementById("dataUserId").innerText = userData.id;
+                })
+                .catch(error => console.error('Ошибка при получении данных:', error));
+        });
+    </script>
+</body>
+</html>

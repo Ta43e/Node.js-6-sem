@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" id="name">
+    <input type="password" id="password">
+    <button onclick="sendLogin()">Вход</button>
+    <button onclick="sendReg()">Регестрация</button>
+    <div id="error"></div>
+
+    <script>
+        function sendLogin() {
+            const nameInput = document.getElementById('name');
+            const passInput = document.getElementById('password');
+            const name = nameInput.value;
+            const pass = passInput.value;
+
+            if (name === '' || pass === '') {
+                let out = document.getElementById('error');   
+                out.innerHTML = `<h3> Ошибка: введите данные </h3>`;
+                return;
+            }
+
+            let dataToSend = {
+                username: name,
+                password: pass,
+            };
+
+            fetch('/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(dataToSend),
+            })
+            .then(response => response.json())
+            .then(data => {
+                let out = document.getElementById('error');   
+                out.innerHTML = `<h3> Успешно: ${data.message} </h3>`;
+                // Очищаем поля ввода после успешной отправки
+                nameInput.value = '';
+                passInput.value = '';
+            })
+            .catch(error => {
+                let out = document.getElementById('error');   
+                out.innerHTML = `<h3> Ошибка: ${error.message} </h3>`;
+            });
+        }
+        
+        function sendReg() {
+    fetch('/register', {
+        method: 'GET',
+    })
+    .then(response => {
+        if (response.ok) {
+            // Переход на другую страницу при успешном ответе
+            window.location.href = '/register.html'; // Замените на путь к вашей странице успеха
+        } else {
+            throw new Error('Ошибка при обработке запроса');
+        }
+    })
+    .catch(error => {
+        let out = document.getElementById('error');   
+        out.innerHTML = `<h3> Ошибка: ${error.message} </h3>`;
+    });
+}
+
+       
+    </script>
+</body>
+</html>
